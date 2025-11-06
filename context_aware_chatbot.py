@@ -75,3 +75,23 @@ with open("answers.json", "w") as f:
     json.dump(outputs, f, indent=2)
 
 print(f"Wrote answers.json with {len(outputs)} rows")
+
+
+
+from llama_index.core.evaluation import FaithfulnessEvaluator, AnswerRelevancyEvaluator
+
+faith = FaithfulnessEvaluator(llm=llm)
+rel = AnswerRelevancyEvaluator(llm=llm)
+
+records = []
+for q in questions:
+    resp = qe.query(q["text"])
+    f = faith.evaluate_response(query=q["text"], response=resp)
+    r = rel.evaluate_response(query=q["text"], response=resp)
+    records.append({
+        "q": q["text"],
+        "faithful": f.passing,
+        "faith_score": f.score,
+        "relevant": r.passing,
+        "rel_score": r.score
+    })

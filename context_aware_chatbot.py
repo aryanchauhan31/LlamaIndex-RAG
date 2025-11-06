@@ -76,8 +76,6 @@ with open("answers.json", "w") as f:
 
 print(f"Wrote answers.json with {len(outputs)} rows")
 
-
-
 from llama_index.core.evaluation import FaithfulnessEvaluator, AnswerRelevancyEvaluator
 
 faith = FaithfulnessEvaluator(llm=llm)
